@@ -48,6 +48,7 @@ private fun ReminderList(
             ReminderListItem(
                 reminder = item,
                 onClick = {},
+                modifier = Modifier.fillParentMaxWidth(),
             )
         }
     }
@@ -57,8 +58,9 @@ private fun ReminderList(
 private fun ReminderListItem(
     reminder: Reminder,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    ConstraintLayout(modifier = Modifier.clickable { onClick() }) {
+    ConstraintLayout(modifier = modifier.clickable { onClick() }) {
         val (divider, reminderTitle, reminderMessage, icon, date) = createRefs()
 
         Divider(
