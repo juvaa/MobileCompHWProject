@@ -24,7 +24,7 @@ fun RemindersView(
         modifier = Modifier.padding(bottom = 24.dp),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(route = "newReminder") },
+                onClick = { /* TODO: navController.navigate(route = "newReminder") */},
                 contentColor = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(all = 28.dp)
             ) {
@@ -45,6 +45,7 @@ fun RemindersView(
 
             RemindersAppBar(
                 backgroundColor = appBarColor,
+                navController = navController
             )
 
             Reminder()
@@ -54,7 +55,8 @@ fun RemindersView(
 
 @Composable
 private fun RemindersAppBar(
-    backgroundColor: Color
+    backgroundColor: Color,
+    navController: NavController
 ) {
     TopAppBar(
         title = {
@@ -68,10 +70,10 @@ private fun RemindersAppBar(
         },
         backgroundColor = backgroundColor,
         actions = {
-            IconButton( onClick = {}) {
+            IconButton( onClick = {navController.navigate(route = "login")}) {
                 Icon(imageVector = Icons.Filled.Logout, contentDescription = stringResource(R.string.Logout))
             }
-            IconButton( onClick = {}) {
+            IconButton( onClick = {navController.navigate(route = "profile")} ) {
                 Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = stringResource(R.string.Account))
             }
         }
