@@ -16,7 +16,7 @@ class ReminderViewModel : ViewModel() {
 
     init {
         val list = mutableListOf<Reminder>()
-        for (x in 1..6) {
+        for (x in 1..10) {
             list.add(
                 Reminder(
                     reminderId = x.toLong(),
