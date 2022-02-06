@@ -60,7 +60,7 @@ fun Login(
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { navController.navigate("payment")},
+                onClick = { navController.navigate("reminders") },
                 enabled = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.small

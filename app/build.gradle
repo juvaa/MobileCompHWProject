@@ -76,4 +76,7 @@ dependencies {
 
     // Foundation
     implementation "androidx.compose.foundation:foundation:1.1.0-rc01"
+
+    // Full Material icon set
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
 }
