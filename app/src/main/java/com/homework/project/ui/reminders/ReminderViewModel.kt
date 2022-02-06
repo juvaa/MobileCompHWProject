@@ -20,7 +20,7 @@ class ReminderViewModel : ViewModel() {
             list.add(
                 Reminder(
                     reminderId = x.toLong(),
-                    reminderTitle = "$x reminder",
+                    reminderTitle = "Reminder $x",
                     reminderMessage = "This is a reminder",
                     reminderDate = Date()
                 )
