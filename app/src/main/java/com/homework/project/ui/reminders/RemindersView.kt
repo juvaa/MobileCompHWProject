@@ -50,7 +50,7 @@ fun RemindersView(
                 navController = navController
             )
 
-            Reminder()
+            Reminder(navController)
         }
     }
 }

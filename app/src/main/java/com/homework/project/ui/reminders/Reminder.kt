@@ -6,10 +6,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -17,28 +16,46 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.homework.project.R
 import com.homework.project.data.entity.Reminder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun Reminder() {
+fun Reminder(
+    navController: NavController
+) {
     val viewModel: ReminderViewModel = viewModel()
     val viewState by viewModel.state.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    val openDialog = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         ReminderList(
-            list = viewState.reminders
+            list = viewState.reminders,
+            viewModel = viewModel,
+            coroutineScope = coroutineScope
+
         )
+//        AlertDialog(
+//            onDismissRequest = { /*TODO*/ },
+//            confirmButton = { removeReminder(reminder, viewModel, coroutineScope) },
+//            dismissButton = { /*TODO*/ },
+//
+//            ) {}
     }
 }
 
 @Composable
 private fun ReminderList(
-    list: List<Reminder>
+    list: List<Reminder>,
+    viewModel: ReminderViewModel,
+    coroutineScope: CoroutineScope
 ) {
     LazyColumn(
         contentPadding = PaddingValues(0.dp),
@@ -49,6 +66,8 @@ private fun ReminderList(
                 reminder = item,
                 onClick = {},
                 modifier = Modifier.fillParentMaxWidth(),
+                viewModel = viewModel,
+                coroutineScope = coroutineScope
             )
         }
     }
@@ -59,9 +78,11 @@ private fun ReminderListItem(
     reminder: Reminder,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: ReminderViewModel,
+    coroutineScope: CoroutineScope
 ) {
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderTitle, reminderMessage, icon, date) = createRefs()
+        val (divider, reminderTitle, reminderMessage, icon, date, deleteIcon) = createRefs()
 
         Divider(
             Modifier.constrainAs(divider) {
@@ -147,7 +168,32 @@ private fun ReminderListItem(
                 contentDescription = stringResource(R.string.Notifications),
             )
         }
+        // icon
+        IconButton(
+            onClick = {},
+            modifier = Modifier
+                .size(50.dp)
+                .padding(6.dp)
+                .constrainAs(deleteIcon) {
+                    top.linkTo(parent.top, 10.dp)
+                    bottom.linkTo(parent.bottom, 10.dp)
+                    end.linkTo(parent.end)
+                }
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = stringResource(R.string.Delete),
+            )
+        }
     }
+}
+
+private fun removeReminder(
+    reminder: Reminder,
+    viewModel: ReminderViewModel,
+    coroutineScope: CoroutineScope
+) {
+    coroutineScope.launch { viewModel.removeReminder(reminder) }
 }
 
 private fun Date.formatToString(): String {

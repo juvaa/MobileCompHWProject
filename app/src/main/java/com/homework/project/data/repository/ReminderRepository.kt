@@ -9,4 +9,6 @@ class ReminderRepository(
     suspend fun addReminder(reminder: Reminder) = reminderDao.insert(reminder)
 
     fun getReminders(userId: Long) = reminderDao.getUserReminders(userId)
+
+    suspend fun deleteReminder(reminder: Reminder) = reminderDao.delete(reminder)
 }

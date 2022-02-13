@@ -29,6 +29,10 @@ class ReminderViewModel(
         }
     }
 
+    suspend fun removeReminder(reminder: Reminder) {
+        reminderRepository.deleteReminder(reminder)
+    }
+
 }
 
 data class ReminderViewState(

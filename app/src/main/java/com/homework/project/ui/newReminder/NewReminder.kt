@@ -29,7 +29,7 @@ fun NewReminder(
     viewModel: NewReminderViewModel = viewModel()
 ) {
     val message = rememberSaveable { mutableStateOf("") }
-    val reminderTime = rememberSaveable { mutableStateOf("") }
+    val reminderTime = rememberSaveable { mutableStateOf("${Date().time}") }
     val coroutineScope = rememberCoroutineScope()
 
     Surface {
@@ -66,7 +66,7 @@ fun NewReminder(
                 OutlinedTextField(
                     value = reminderTime.value,
                     onValueChange = { reminderTime.value = it },
-                    label = { Text(text = "Reminder time (as epoch)")},
+                    label = { Text(text = "Reminder time (epoch time now: ${Date().time})")},
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number

@@ -14,7 +14,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
 import com.homework.project.data.UserId
-import com.homework.project.data.UserPreferences
 import com.homework.project.data.entity.User
 
 @Composable
@@ -23,7 +22,7 @@ fun UserProfile(
     userId: UserId = UserId,
     viewModel: UserProfileViewModel = viewModel()
 ) {
-    val user: User? = viewModel.getUser()
+    val user: User? = viewModel.getUser() // TODO: Fix user being always null (problem likely in the viewModel)
     Surface {
         Column(
             modifier = Modifier
