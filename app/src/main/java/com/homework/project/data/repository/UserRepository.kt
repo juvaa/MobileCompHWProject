@@ -8,5 +8,5 @@ class UserRepository(
 ) {
     suspend fun addUser(user: User) = userDao.insert(user)
 
-    fun findUser(userName: String) = userDao.user(userName)
+    suspend fun findUser(userName: String) = userDao.user(userName)
 }

@@ -25,7 +25,7 @@ class LoginViewModel(
         )
     }
 
-    fun validateUser(userName: String, password: String) : Boolean {
+    suspend fun validateUser(userName: String, password: String) : Boolean {
         val user = userRepository.findUser(userName) ?: return false
         return password == user.password
     }

@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
+import kotlinx.coroutines.launch
 
 @Composable
 fun Login(
@@ -25,6 +27,8 @@ fun Login(
     Surface(modifier = Modifier.fillMaxSize()) {
         val username = rememberSaveable { mutableStateOf("") }
         val password = rememberSaveable { mutableStateOf("") }
+        val coroutineScope = rememberCoroutineScope()
+
 
         Column(
             modifier = Modifier
@@ -62,12 +66,16 @@ fun Login(
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(
-                onClick = { validateLogin(
-                    navController = navController,
-                    username = username.value,
-                    password = password.value,
-                    viewModel = viewModel
-                ) },
+                onClick = {
+                    coroutineScope.launch {
+                        validateLogin(
+                            navController = navController,
+                            username = username.value,
+                            password = password.value,
+                            viewModel = viewModel
+                        )
+                    }
+                          },
                 enabled = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.small
@@ -78,7 +86,7 @@ fun Login(
     }
 }
 
-fun validateLogin(
+suspend fun validateLogin(
     navController: NavController,
     username: String,
     password: String,
