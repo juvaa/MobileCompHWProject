@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "users",
     indices = [
-        Index("id", unique = true)
+        Index("id", unique = true),
+        Index("user_name", unique = true)
     ]
 )
 

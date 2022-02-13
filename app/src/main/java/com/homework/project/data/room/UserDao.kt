@@ -8,6 +8,9 @@ abstract class UserDao {
     @Query("""SELECT * FROM users WHERE id = :userId""")
     abstract fun user(userId: Long): User?
 
+    @Query("""SELECT * FROM users WHERE user_name = :userName""")
+    abstract fun user(userName: String): User?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(entity: User): Long
 

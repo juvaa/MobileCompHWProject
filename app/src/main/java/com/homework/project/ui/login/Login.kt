@@ -1,6 +1,5 @@
 package com.homework.project.ui.login
 
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -11,23 +10,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
-import com.homework.project.R
-import com.homework.project.data.UserPreferences
 
 @Composable
 fun Login(
-    navController: NavController
+    navController: NavController,
+    viewModel: LoginViewModel = viewModel()
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         val username = rememberSaveable { mutableStateOf("") }
         val password = rememberSaveable { mutableStateOf("") }
-        val context = LocalContext.current
 
         Column(
             modifier = Modifier
@@ -69,7 +66,7 @@ fun Login(
                     navController = navController,
                     username = username.value,
                     password = password.value,
-                    context = context
+                    viewModel = viewModel
                 ) },
                 enabled = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -85,13 +82,7 @@ fun validateLogin(
     navController: NavController,
     username: String,
     password: String,
-    context: Context,
+    viewModel: LoginViewModel,
 ) {
-    UserPreferences.init(context)
-    if (
-        username == UserPreferences.read(context.getString(R.string.username_key), null) &&
-        password == UserPreferences.read(context.getString(R.string.password_key), null)
-    ) {
-        navController.navigate("reminders")
-    }
+    if (viewModel.validateUser(username, password)) navController.navigate("reminders")
 }

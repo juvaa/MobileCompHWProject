@@ -7,4 +7,6 @@ class UserRepository(
     private val userDao: UserDao
 ) {
     suspend fun addUser(user: User) = userDao.insert(user)
+
+    fun findUser(userName: String) = userDao.user(userName)
 }
