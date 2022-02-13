@@ -10,17 +10,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
+import com.homework.project.data.UserId
 import com.homework.project.data.UserPreferences
+import com.homework.project.data.entity.User
 
 @Composable
 fun UserProfile(
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
+    userId: UserId = UserId,
+    viewModel: UserProfileViewModel = viewModel()
 ) {
-    val firstName = UserPreferences.read("FirstName", "John")
-    val lastName = UserPreferences.read("LastName", "Doe")
-
+    val user: User? = viewModel.getUser()
     Surface {
         Column(
             modifier = Modifier
@@ -45,10 +48,12 @@ fun UserProfile(
                 verticalArrangement = Arrangement.Top,
                 modifier = Modifier.padding(16.dp)
             ) {
-                Text(
-                    text = "First name: $firstName \nLast name: $lastName",
-                    style = MaterialTheme.typography.h4
-                )
+                if (user != null) {
+                    Text(
+                        text = "First name: ${user.firstname} \nLast name: ${user.lastname}",
+                        style = MaterialTheme.typography.h4
+                    )
+                }
             }
         }
     }

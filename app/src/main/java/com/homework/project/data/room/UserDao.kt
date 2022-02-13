@@ -6,7 +6,7 @@ import com.homework.project.data.entity.User
 @Dao
 abstract class UserDao {
     @Query("""SELECT * FROM users WHERE id = :userId""")
-    abstract suspend fun user(userId: Long): User?
+    abstract suspend fun user(userId: Long): User
 
     @Query("""SELECT * FROM users WHERE user_name = :userName""")
     abstract suspend fun user(userName: String): User?

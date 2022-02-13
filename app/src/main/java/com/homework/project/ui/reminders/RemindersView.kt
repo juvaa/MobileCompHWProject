@@ -15,16 +15,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
+import com.homework.project.data.UserId
 
 @Composable
 fun RemindersView(
-    navController: NavController
+    navController: NavController,
+    userId: UserId = UserId
 ) {
     Scaffold(
         modifier = Modifier.padding(bottom = 24.dp),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* TODO: navController.navigate(route = "newReminder") */},
+                onClick = { navController.navigate(route = "newReminder") },
                 contentColor = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(all = 28.dp)
             ) {

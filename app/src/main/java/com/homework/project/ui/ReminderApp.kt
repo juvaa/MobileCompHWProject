@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import com.homework.project.ReminderAppState
 import com.homework.project.rememberReminderAppState
 import com.homework.project.ui.login.Login
+import com.homework.project.ui.newReminder.NewReminder
 import com.homework.project.ui.reminders.RemindersView
 import com.homework.project.ui.userProfile.UserProfile
 
@@ -23,6 +24,9 @@ fun ReminderApp(appState: ReminderAppState = rememberReminderAppState()) {
         }
         composable(route = "profile") {
             UserProfile(onBackPress = appState::navigateBack)
+        }
+        composable(route = "newReminder") {
+            NewReminder(onBackPress = appState::navigateBack)
         }
     }
 }

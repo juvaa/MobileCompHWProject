@@ -7,7 +7,7 @@ import com.homework.project.data.entity.User
 
 @Database(
     entities = [User::class, Reminder::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class ReminderAppDatabase : RoomDatabase() {

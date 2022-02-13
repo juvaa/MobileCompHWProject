@@ -7,4 +7,6 @@ class ReminderRepository(
     private val reminderDao: ReminderDao
 ) {
     suspend fun addReminder(reminder: Reminder) = reminderDao.insert(reminder)
+
+    fun getReminders(userId: Long) = reminderDao.getUserReminders(userId)
 }

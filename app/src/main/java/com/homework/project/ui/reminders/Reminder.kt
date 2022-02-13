@@ -73,7 +73,7 @@ private fun ReminderListItem(
 
         //  title
         Text(
-            text = reminder.reminderTitle,
+            text = reminder.creator_id.toString(),
             maxLines = 1,
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderTitle) {
@@ -91,7 +91,7 @@ private fun ReminderListItem(
 
         // message
         Text(
-            text = reminder.reminderMessage,
+            text = reminder.message,
             maxLines = 1,
             style = MaterialTheme.typography.subtitle2,
             modifier = Modifier.constrainAs(reminderMessage) {
@@ -111,7 +111,7 @@ private fun ReminderListItem(
         // date
         Text(
             text = when {
-                reminder.reminderDate != null -> { reminder.reminderDate.formatToString() }
+                reminder.reminder_time != null -> { reminder.reminder_time.toDateString() }
                 else -> Date().formatToString()
             },
             maxLines = 1,
@@ -152,4 +152,8 @@ private fun ReminderListItem(
 
 private fun Date.formatToString(): String {
     return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(this)
+}
+
+private fun Long.toDateString(): String {
+    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(Date(this))
 }
