@@ -42,12 +42,6 @@ fun Reminder(
             coroutineScope = coroutineScope
 
         )
-//        AlertDialog(
-//            onDismissRequest = { /*TODO*/ },
-//            confirmButton = { removeReminder(reminder, viewModel, coroutineScope) },
-//            dismissButton = { /*TODO*/ },
-//
-//            ) {}
     }
 }
 
@@ -81,6 +75,38 @@ private fun ReminderListItem(
     viewModel: ReminderViewModel,
     coroutineScope: CoroutineScope
 ) {
+    val openDialog = remember { mutableStateOf(false)}
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = { openDialog.value = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        removeReminder(reminder, viewModel, coroutineScope)
+                        openDialog.value = false
+                    },
+                ) {
+                    Text("Delete")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            },
+            title = {
+                Text("Delete reminder?")
+            },
+            text = {
+                Text("Are you sure you want to delete this reminder?")
+            }
+        )
+    }
+
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
         val (divider, reminderTitle, reminderMessage, icon, date, deleteIcon) = createRefs()
 
@@ -160,7 +186,7 @@ private fun ReminderListItem(
                 .constrainAs(icon) {
                     top.linkTo(parent.top, 10.dp)
                     bottom.linkTo(parent.bottom, 10.dp)
-                    end.linkTo(parent.end)
+                    end.linkTo(deleteIcon.start)
                 }
         ) {
             Icon(
@@ -170,7 +196,7 @@ private fun ReminderListItem(
         }
         // icon
         IconButton(
-            onClick = {},
+            onClick = { openDialog.value = true },
             modifier = Modifier
                 .size(50.dp)
                 .padding(6.dp)
