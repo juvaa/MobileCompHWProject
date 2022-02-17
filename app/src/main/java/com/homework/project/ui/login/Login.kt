@@ -17,14 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
-import com.homework.project.data.UserId
+import com.homework.project.data.Ids
 import kotlinx.coroutines.launch
 
 @Composable
 fun Login(
     navController: NavController,
     viewModel: LoginViewModel = viewModel(),
-    userId: UserId = UserId
+    userId: Ids = Ids
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         val username = rememberSaveable { mutableStateOf("") }
@@ -94,7 +94,7 @@ suspend fun validateLogin(
     username: String,
     password: String,
     viewModel: LoginViewModel,
-    userId: UserId,
+    userId: Ids,
 ) {
     if (viewModel.validateUser(username, password)) {
         userId.Id = viewModel.getUserId()

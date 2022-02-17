@@ -9,17 +9,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
-import com.homework.project.data.UserId
+import com.homework.project.data.Ids
 import com.homework.project.data.entity.User
 
 @Composable
 fun UserProfile(
     onBackPress: () -> Unit,
-    userId: UserId = UserId,
+    userId: Ids = Ids,
     viewModel: UserProfileViewModel = viewModel()
 ) {
     val user: User? = viewModel.getUser() // TODO: Fix user being always null (problem likely in the viewModel)

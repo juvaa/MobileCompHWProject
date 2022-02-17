@@ -31,7 +31,6 @@ fun Reminder(
     val viewModel: ReminderViewModel = viewModel()
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val openDialog = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -39,8 +38,8 @@ fun Reminder(
         ReminderList(
             list = viewState.reminders,
             viewModel = viewModel,
-            coroutineScope = coroutineScope
-
+            coroutineScope = coroutineScope,
+            navController = navController
         )
     }
 }
@@ -49,7 +48,8 @@ fun Reminder(
 private fun ReminderList(
     list: List<Reminder>,
     viewModel: ReminderViewModel,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    navController: NavController
 ) {
     LazyColumn(
         contentPadding = PaddingValues(0.dp),
@@ -58,7 +58,7 @@ private fun ReminderList(
         items(list) { item ->
             ReminderListItem(
                 reminder = item,
-                onClick = {},
+                onClick = { editReminder(item, navController) },
                 modifier = Modifier.fillParentMaxWidth(),
                 viewModel = viewModel,
                 coroutineScope = coroutineScope
@@ -75,15 +75,15 @@ private fun ReminderListItem(
     viewModel: ReminderViewModel,
     coroutineScope: CoroutineScope
 ) {
-    val openDialog = remember { mutableStateOf(false)}
-    if (openDialog.value) {
+    val openDeleteDialog = remember { mutableStateOf(false)}
+    if (openDeleteDialog.value) {
         AlertDialog(
-            onDismissRequest = { openDialog.value = false },
+            onDismissRequest = { openDeleteDialog.value = false },
             confirmButton = {
                 TextButton(
                     onClick = {
                         removeReminder(reminder, viewModel, coroutineScope)
-                        openDialog.value = false
+                        openDeleteDialog.value = false
                     },
                 ) {
                     Text("Delete")
@@ -92,7 +92,7 @@ private fun ReminderListItem(
             dismissButton = {
                 TextButton(
                     onClick = {
-                        openDialog.value = false
+                        openDeleteDialog.value = false
                     }
                 ) {
                     Text("Cancel")
@@ -196,7 +196,7 @@ private fun ReminderListItem(
         }
         // icon
         IconButton(
-            onClick = { openDialog.value = true },
+            onClick = { openDeleteDialog.value = true },
             modifier = Modifier
                 .size(50.dp)
                 .padding(6.dp)
@@ -220,6 +220,13 @@ private fun removeReminder(
     coroutineScope: CoroutineScope
 ) {
     coroutineScope.launch { viewModel.removeReminder(reminder) }
+}
+
+private fun editReminder(
+    reminder: Reminder,
+    navController: NavController
+) {
+
 }
 
 private fun Date.formatToString(): String {

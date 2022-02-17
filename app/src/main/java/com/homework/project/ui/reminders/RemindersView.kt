@@ -15,12 +15,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
-import com.homework.project.data.UserId
+import com.homework.project.data.Ids
 
 @Composable
 fun RemindersView(
     navController: NavController,
-    userId: UserId = UserId
+    userId: Ids = Ids
 ) {
     Scaffold(
         modifier = Modifier.padding(bottom = 24.dp),

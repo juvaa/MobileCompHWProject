@@ -3,18 +3,17 @@ package com.homework.project.ui.reminders
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.homework.project.Graph
-import com.homework.project.data.UserId
+import com.homework.project.data.Ids
 import com.homework.project.data.entity.Reminder
 import com.homework.project.data.repository.ReminderRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
 
 class ReminderViewModel(
     private val reminderRepository: ReminderRepository = Graph.reminderRepository,
-    private val userId: UserId = UserId
+    private val userId: Ids = Ids
 ) : ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
 
@@ -32,6 +31,8 @@ class ReminderViewModel(
     suspend fun removeReminder(reminder: Reminder) {
         reminderRepository.deleteReminder(reminder)
     }
+
+
 
 }
 

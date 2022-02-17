@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
-import com.homework.project.data.UserId
+import com.homework.project.data.Ids
 import com.homework.project.data.entity.Reminder
 import kotlinx.coroutines.launch
 import java.util.*
@@ -25,7 +25,7 @@ import java.util.*
 @Composable
 fun NewReminder(
     onBackPress: () -> Unit,
-    userId: UserId = UserId,
+    userId: Ids = Ids,
     viewModel: NewReminderViewModel = viewModel()
 ) {
     val message = rememberSaveable { mutableStateOf("") }
