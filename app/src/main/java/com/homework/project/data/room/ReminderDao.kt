@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 abstract class ReminderDao {
     @Query("""SELECT * FROM reminders 
         WHERE (creator_id = :creatorId AND creation_time = :creationTime)""")
-    abstract suspend fun reminder(creatorId: Long, creationTime: Long): Reminder?
+    abstract suspend fun reminder(creatorId: Long, creationTime: Long): Reminder
 
     @Transaction
     @Query("""SELECT * FROM reminders WHERE creator_id = :userId""")

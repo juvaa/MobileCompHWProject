@@ -5,6 +5,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,7 +23,9 @@ fun UserProfile(
     userId: Ids = Ids,
     viewModel: UserProfileViewModel = viewModel()
 ) {
-    val user: User? = viewModel.getUser() // TODO: Fix user being always null (problem likely in the viewModel)
+    val viewState by viewModel.state.collectAsState()
+    val user = viewState.user
+
     Surface {
         Column(
             modifier = Modifier

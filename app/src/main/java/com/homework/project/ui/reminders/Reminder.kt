@@ -58,7 +58,7 @@ private fun ReminderList(
         items(list) { item ->
             ReminderListItem(
                 reminder = item,
-                onClick = { editReminder(item, navController) },
+                onClick = { editReminder(item, navController, viewModel) },
                 modifier = Modifier.fillParentMaxWidth(),
                 viewModel = viewModel,
                 coroutineScope = coroutineScope
@@ -224,9 +224,11 @@ private fun removeReminder(
 
 private fun editReminder(
     reminder: Reminder,
-    navController: NavController
+    navController: NavController,
+    viewModel: ReminderViewModel
 ) {
-
+    viewModel.saveReminderReference(reminder)
+    navController.navigate(route = "editReminder")
 }
 
 private fun Date.formatToString(): String {

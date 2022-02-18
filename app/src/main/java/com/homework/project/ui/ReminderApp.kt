@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.homework.project.ReminderAppState
 import com.homework.project.rememberReminderAppState
+import com.homework.project.ui.editReminder.EditReminder
 import com.homework.project.ui.login.Login
 import com.homework.project.ui.newReminder.NewReminder
 import com.homework.project.ui.reminders.RemindersView
@@ -27,6 +28,9 @@ fun ReminderApp(appState: ReminderAppState = rememberReminderAppState()) {
         }
         composable(route = "newReminder") {
             NewReminder(onBackPress = appState::navigateBack)
+        }
+        composable(route = "editReminder") {
+            EditReminder(onBackPress = appState::navigateBack)
         }
     }
 }

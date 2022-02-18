@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class ReminderViewModel(
     private val reminderRepository: ReminderRepository = Graph.reminderRepository,
-    private val userId: Ids = Ids
+    private val ids: Ids = Ids
 ) : ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
 
@@ -22,7 +22,7 @@ class ReminderViewModel(
 
     init {
         viewModelScope.launch {
-            reminderRepository.getReminders(userId.Id).collect { reminders ->
+            reminderRepository.getReminders(ids.Id).collect { reminders ->
                 _state.value = ReminderViewState(reminders)
             }
         }
@@ -32,7 +32,9 @@ class ReminderViewModel(
         reminderRepository.deleteReminder(reminder)
     }
 
-
+    fun saveReminderReference(reminder: Reminder) {
+        ids.ReminderCreationTime = reminder.creation_time
+    }
 
 }
 

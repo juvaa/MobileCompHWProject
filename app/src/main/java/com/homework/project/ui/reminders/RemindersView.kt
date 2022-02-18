@@ -19,8 +19,7 @@ import com.homework.project.data.Ids
 
 @Composable
 fun RemindersView(
-    navController: NavController,
-    userId: Ids = Ids
+    navController: NavController
 ) {
     Scaffold(
         modifier = Modifier.padding(bottom = 24.dp),
