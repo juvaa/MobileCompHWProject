@@ -52,7 +52,7 @@ private fun ReminderList(
     navController: NavController
 ) {
     LazyColumn(
-        contentPadding = PaddingValues(0.dp),
+        contentPadding = PaddingValues(bottom = 102.dp),
         verticalArrangement = Arrangement.Center
     ) {
         items(list) { item ->
@@ -112,7 +112,7 @@ private fun ReminderListItem(
 
         Divider(
             Modifier.constrainAs(divider) {
-                top.linkTo(parent.top)
+                top.linkTo(parent.bottom)
                 centerHorizontallyTo(parent)
                 width = Dimension.fillToConstraints
             }
