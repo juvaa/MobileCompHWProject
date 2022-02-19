@@ -32,7 +32,9 @@ fun UserProfile(
                 .fillMaxSize()
                 .systemBarsPadding()
         ) {
-            TopAppBar {
+            TopAppBar(
+                backgroundColor = MaterialTheme.colors.secondary
+            ) {
                 IconButton(
                     onClick = onBackPress
                 ) {

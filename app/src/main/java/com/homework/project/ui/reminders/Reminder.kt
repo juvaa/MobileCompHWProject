@@ -108,7 +108,7 @@ private fun ReminderListItem(
     }
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderTitle, reminderMessage, icon, date, deleteIcon) = createRefs()
+        val (divider, reminderMessage, date, icon, deleteIcon) = createRefs()
 
         Divider(
             Modifier.constrainAs(divider) {
@@ -118,29 +118,11 @@ private fun ReminderListItem(
             }
         )
 
-        //  title
-        Text(
-            text = reminder.creator_id.toString(),
-            maxLines = 1,
-            style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.constrainAs(reminderTitle) {
-                linkTo(
-                    start = parent.start,
-                    end = icon.start,
-                    startMargin = 24.dp,
-                    endMargin = 16.dp,
-                    bias = 0f
-                )
-                top.linkTo(parent.top, margin = 10.dp)
-                width = Dimension.preferredWrapContent
-            }
-        )
-
         // message
         Text(
             text = reminder.message,
             maxLines = 1,
-            style = MaterialTheme.typography.subtitle2,
+            style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderMessage) {
                 linkTo(
                     start = parent.start,
@@ -149,8 +131,8 @@ private fun ReminderListItem(
                     endMargin = 8.dp,
                     bias = 0f
                 )
-                top.linkTo(reminderTitle.bottom, margin = 6.dp)
-                bottom.linkTo(parent.bottom, 10.dp)
+                top.linkTo(parent.top, 8.dp)
+                bottom.linkTo(date.top, 4.dp)
                 width = Dimension.preferredWrapContent
             }
         )
@@ -166,15 +148,15 @@ private fun ReminderListItem(
             style = MaterialTheme.typography.caption,
             modifier = Modifier.constrainAs(date) {
                 linkTo(
-                    start = reminderMessage.end,
+                    start = parent.start,
                     end = icon.start,
-                    startMargin = 8.dp,
-                    endMargin = 16.dp,
+                    startMargin = 24.dp,
+                    endMargin = 8.dp,
                     bias = 0f
                 )
-                centerVerticallyTo(reminderMessage)
-                top.linkTo(reminderTitle.bottom, 6.dp)
-                bottom.linkTo(parent.bottom, 10.dp)
+                top.linkTo(reminderMessage.bottom, 4.dp)
+                bottom.linkTo(parent.bottom, 8.dp)
+                width = Dimension.preferredWrapContent
             }
         )
         // icon
@@ -184,8 +166,8 @@ private fun ReminderListItem(
                 .size(50.dp)
                 .padding(6.dp)
                 .constrainAs(icon) {
-                    top.linkTo(parent.top, 10.dp)
-                    bottom.linkTo(parent.bottom, 10.dp)
+                    top.linkTo(parent.top, 8.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
                     end.linkTo(deleteIcon.start)
                 }
         ) {
@@ -201,8 +183,8 @@ private fun ReminderListItem(
                 .size(50.dp)
                 .padding(6.dp)
                 .constrainAs(deleteIcon) {
-                    top.linkTo(parent.top, 10.dp)
-                    bottom.linkTo(parent.bottom, 10.dp)
+                    top.linkTo(parent.top, 8.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
                     end.linkTo(parent.end)
                 }
         ) {

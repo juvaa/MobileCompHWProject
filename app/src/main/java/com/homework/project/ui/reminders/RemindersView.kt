@@ -26,13 +26,12 @@ fun RemindersView(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navController.navigate(route = "newReminder") },
-                contentColor = MaterialTheme.colors.primary,
+                //contentColor = MaterialTheme.colors.onSecondary.copy(alpha = 0.88f),
                 modifier = Modifier.padding(all = 28.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onPrimary
+                    contentDescription = null
                 )
             }
         }
@@ -42,7 +41,7 @@ fun RemindersView(
                 .systemBarsPadding()
                 .fillMaxWidth()
         ) {
-            val appBarColor = MaterialTheme.colors.secondary.copy(alpha = 0.87f)
+            val appBarColor = MaterialTheme.colors.secondary
 
             RemindersAppBar(
                 backgroundColor = appBarColor,
@@ -63,7 +62,6 @@ private fun RemindersAppBar(
         title = {
             Text(
                 text = stringResource(R.string.app_name),
-                color = MaterialTheme.colors.onSecondary,
                 modifier = Modifier
                     .padding(start = 4.dp)
                     .heightIn(max = 24.dp)
@@ -72,10 +70,18 @@ private fun RemindersAppBar(
         backgroundColor = backgroundColor,
         actions = {
             IconButton( onClick = {navController.navigate(route = "login")}) {
-                Icon(imageVector = Icons.Filled.Logout, contentDescription = stringResource(R.string.Logout))
+                Icon(
+                    imageVector = Icons.Filled.Logout,
+                    contentDescription = stringResource(R.string.Logout),
+                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.88f)
+                )
             }
             IconButton( onClick = {navController.navigate(route = "profile")} ) {
-                Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = stringResource(R.string.Account))
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = stringResource(R.string.Account),
+                    tint = MaterialTheme.colors.onSurface.copy(alpha = 0.88f)
+                )
             }
         }
     )
