@@ -6,8 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.homework.project.R
 import com.homework.project.data.entity.Reminder
+import com.homework.project.util.ReminderIcons
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -108,13 +108,31 @@ private fun ReminderListItem(
     }
 
     ConstraintLayout(modifier = modifier.clickable { onClick() }) {
-        val (divider, reminderMessage, date, icon, deleteIcon) = createRefs()
+        val (divider, icon, reminderMessage, date, notifications, deleteIcon) = createRefs()
+        val reminderIcon = when (reminder.reminder_icon) {
+            ReminderIcons.DEFAULT -> Icons.Filled.Event
+            ReminderIcons.CAKE -> Icons.Filled.Cake
+            ReminderIcons.GROUPS -> Icons.Filled.Groups
+            ReminderIcons.SCHOOL -> Icons.Filled.School
+        }
 
         Divider(
             Modifier.constrainAs(divider) {
                 top.linkTo(parent.bottom)
                 centerHorizontallyTo(parent)
                 width = Dimension.fillToConstraints
+            }
+        )
+
+        // icon
+        Icon(
+            imageVector = reminderIcon,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(8.dp)
+                .constrainAs(icon) {
+                start.linkTo(parent.start)
+                centerVerticallyTo(parent)
             }
         )
 
@@ -125,9 +143,9 @@ private fun ReminderListItem(
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier.constrainAs(reminderMessage) {
                 linkTo(
-                    start = parent.start,
-                    end = icon.start,
-                    startMargin = 24.dp,
+                    start = icon.end,
+                    end = notifications.start,
+                    startMargin = 8.dp,
                     endMargin = 8.dp,
                     bias = 0f
                 )
@@ -148,9 +166,9 @@ private fun ReminderListItem(
             style = MaterialTheme.typography.caption,
             modifier = Modifier.constrainAs(date) {
                 linkTo(
-                    start = parent.start,
-                    end = icon.start,
-                    startMargin = 24.dp,
+                    start = icon.end,
+                    end = notifications.start,
+                    startMargin = 8.dp,
                     endMargin = 8.dp,
                     bias = 0f
                 )
@@ -159,13 +177,13 @@ private fun ReminderListItem(
                 width = Dimension.preferredWrapContent
             }
         )
-        // icon
+        // notifications button
         IconButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
                 .size(50.dp)
                 .padding(6.dp)
-                .constrainAs(icon) {
+                .constrainAs(notifications) {
                     top.linkTo(parent.top, 8.dp)
                     bottom.linkTo(parent.bottom, 8.dp)
                     end.linkTo(deleteIcon.start)
@@ -176,7 +194,7 @@ private fun ReminderListItem(
                 contentDescription = stringResource(R.string.Notifications),
             )
         }
-        // icon
+        // delete button
         IconButton(
             onClick = { openDeleteDialog.value = true },
             modifier = Modifier

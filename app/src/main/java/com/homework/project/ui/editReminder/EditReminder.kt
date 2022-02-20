@@ -1,10 +1,11 @@
 package com.homework.project.ui.editReminder
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
 import com.homework.project.data.Ids
 import com.homework.project.data.entity.Reminder
+import com.homework.project.util.ReminderIcons
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -29,6 +31,13 @@ fun EditReminder(
     val coroutineScope = rememberCoroutineScope()
     val viewState by viewModel.state.collectAsState()
     val reminder = viewState.reminder
+
+    var expanded by remember { mutableStateOf(false) }
+    val dropdownIcon = if (expanded) {
+        Icons.Filled.ArrowDropUp
+    } else {
+        Icons.Filled.ArrowDropDown
+    }
 
     Surface {
         Column(
@@ -54,6 +63,14 @@ fun EditReminder(
             if (reminder != null) {
                 val message = rememberSaveable { mutableStateOf(reminder.message) }
                 val reminderTime = rememberSaveable { mutableStateOf(reminder.reminder_time.toString()) }
+                val reminderIcon = rememberSaveable { mutableStateOf(reminder.reminder_icon) }
+
+                val icon = when (reminderIcon.value) {
+                    ReminderIcons.DEFAULT -> Icons.Filled.Event
+                    ReminderIcons.CAKE -> Icons.Filled.Cake
+                    ReminderIcons.GROUPS -> Icons.Filled.Groups
+                    ReminderIcons.SCHOOL -> Icons.Filled.School
+                }
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,6 +94,61 @@ fun EditReminder(
                         )
                     )
                     Spacer(modifier = Modifier.height(10.dp))
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        OutlinedTextField(
+                            value = reminderIcon.value.toString(),
+                            onValueChange = { },
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text("Icon") },
+                            readOnly = true,
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = dropdownIcon,
+                                    contentDescription = null,
+                                    modifier = Modifier.clickable { expanded = !expanded }
+                                )
+                            },
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = icon,
+                                    contentDescription = null
+                                )
+                            }
+                        )
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            ReminderIcons.values().forEach { dropDownOption ->
+                                DropdownMenuItem(
+                                    onClick = {
+                                        reminderIcon.value = dropDownOption
+                                        expanded = false
+                                    }
+                                ) {
+                                    val menuItemIcon = when (dropDownOption) {
+                                        ReminderIcons.DEFAULT -> Icons.Filled.Event
+                                        ReminderIcons.CAKE -> Icons.Filled.Cake
+                                        ReminderIcons.GROUPS -> Icons.Filled.Groups
+                                        ReminderIcons.SCHOOL -> Icons.Filled.School
+                                    }
+                                    Row(modifier = Modifier.fillMaxWidth()) {
+                                        Icon(
+                                            imageVector = menuItemIcon,
+                                            contentDescription = null,
+                                            modifier = Modifier.padding(8.dp)
+                                        )
+                                        Text(
+                                            text = dropDownOption.name,
+                                            modifier = Modifier.padding(8.dp)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
                     Button(
                         enabled = true,
                         onClick = {
@@ -90,6 +162,7 @@ fun EditReminder(
                                         reminder_seen = reminder.reminder_seen,
                                         location_x = reminder.location_x,
                                         location_y = reminder.location_y,
+                                        reminder_icon = reminderIcon.value
                                     )
                                 )
                             }

@@ -1,9 +1,10 @@
 package com.homework.project.data.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
+import androidx.room.*
+import com.homework.project.data.Converters
+import com.homework.project.util.ReminderIcons
+
+@TypeConverters(Converters::class)
 
 @Entity(
     tableName = "reminders",
@@ -30,4 +31,5 @@ data class Reminder(
     @ColumnInfo(name = "creation_time") val creation_time: Long,
     @ColumnInfo(name = "creator_id") val creator_id: Long,
     @ColumnInfo(name = "reminder_seen") val reminder_seen: Boolean = false,
+    @ColumnInfo(name = "reminder_icon") val reminder_icon: ReminderIcons,
     )
