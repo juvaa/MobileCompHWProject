@@ -2,7 +2,6 @@ package com.homework.project.ui.editReminder
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -11,21 +10,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.systemBarsPadding
 import com.homework.project.R
-import com.homework.project.data.Ids
 import com.homework.project.data.entity.Reminder
 import com.homework.project.util.ReminderIcons
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
 fun EditReminder(
     onBackPress: () -> Unit,
-    ids: Ids = Ids,
     viewModel: EditReminderViewModel = viewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -38,6 +39,10 @@ fun EditReminder(
     } else {
         Icons.Filled.ArrowDropDown
     }
+
+    val parseError = rememberSaveable { mutableStateOf(false) }
+    val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+    var checkedTime: Date?
 
     Surface {
         Column(
@@ -62,7 +67,7 @@ fun EditReminder(
             }
             if (reminder != null) {
                 val message = rememberSaveable { mutableStateOf(reminder.message) }
-                val reminderTime = rememberSaveable { mutableStateOf(reminder.reminder_time.toString()) }
+                val reminderTime = rememberSaveable { mutableStateOf(df.format(reminder.reminder_time)) }
                 val reminderIcon = rememberSaveable { mutableStateOf(reminder.reminder_icon) }
 
                 val icon = when (reminderIcon.value) {
@@ -85,13 +90,19 @@ fun EditReminder(
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     OutlinedTextField(
+                        isError = parseError.value,
                         value = reminderTime.value,
-                        onValueChange = { reminderTime.value = it },
-                        label = { Text(text = "Reminder time (epoch time now: ${Date().time})") },
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
-                        )
+                        onValueChange = {
+                            reminderTime.value = it
+                            parseError.value = false
+                        },
+                        label = { Text(text = "Reminder time (format ${df.toLocalizedPattern()})")},
+                        placeholder = { Text(text = df.toLocalizedPattern())},
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics {
+                                if (parseError.value) error("Invalid date format")
+                            }
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Box(modifier = Modifier.fillMaxWidth()) {
@@ -152,21 +163,25 @@ fun EditReminder(
                     Button(
                         enabled = true,
                         onClick = {
-                            coroutineScope.launch {
-                                viewModel.updateReminder(
-                                    Reminder(
-                                        message = message.value,
-                                        creator_id = reminder.creator_id,
-                                        creation_time = reminder.creation_time,
-                                        reminder_time = reminderTime.value.toLong(),
-                                        reminder_seen = reminder.reminder_seen,
-                                        location_x = reminder.location_x,
-                                        location_y = reminder.location_y,
-                                        reminder_icon = reminderIcon.value
+                            checkedTime = parseDate(reminderTime.value , df, parseError)
+
+                            if (!parseError.value) {
+                                coroutineScope.launch {
+                                    viewModel.updateReminder(
+                                        Reminder(
+                                            message = message.value,
+                                            creator_id = reminder.creator_id,
+                                            creation_time = reminder.creation_time,
+                                            reminder_time = checkedTime!!.time,
+                                            reminder_seen = reminder.reminder_seen,
+                                            location_x = reminder.location_x,
+                                            location_y = reminder.location_y,
+                                            reminder_icon = reminderIcon.value
+                                        )
                                     )
-                                )
+                                }
+                                onBackPress()
                             }
-                            onBackPress()
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -181,5 +196,20 @@ fun EditReminder(
                 }
             }
         }
+    }
+}
+
+fun parseDate(
+    dateString: String,
+    df: DateFormat,
+    parseError: MutableState<Boolean>
+) : Date? {
+    return try {
+        val date: Date? = df.parse(dateString)
+        parseError.value = date == null
+        date
+    } catch (e: ParseException) {
+        parseError.value = true
+        null
     }
 }
