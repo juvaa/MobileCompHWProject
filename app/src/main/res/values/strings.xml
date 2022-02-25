@@ -3,8 +3,6 @@
     <string name="Notifications">Notifications</string>
     <string name="Logout">Logout</string>
     <string name="Account">Account</string>
-    <string name="username_key">Username</string>
-    <string name="password_key">Password</string>
     <string name="ArrowBack">ArrowBack</string>
     <string name="Delete">Delete</string>
 </resources>
