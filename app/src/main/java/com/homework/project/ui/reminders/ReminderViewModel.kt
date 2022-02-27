@@ -1,8 +1,13 @@
 package com.homework.project.ui.reminders
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.homework.project.Graph
+import com.homework.project.R
 import com.homework.project.data.Ids
 import com.homework.project.data.entity.Reminder
 import com.homework.project.data.repository.ReminderRepository
@@ -21,6 +26,7 @@ class ReminderViewModel(
         get() = _state
 
     init {
+        createNotificationChannel(context = Graph.appContext)
         viewModelScope.launch {
             reminderRepository.getReminders(ids.Id).collect { reminders ->
                 _state.value = ReminderViewState(reminders)
@@ -36,6 +42,25 @@ class ReminderViewModel(
         ids.ReminderCreationTime = reminder.creation_time
     }
 
+}
+
+private fun createNotificationChannel(context: Context) {
+    // Create the NotificationChannel, but only on API 26+ because
+    // the NotificationChannel class is new and not in the support library
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val name = context.getString(R.string.reminder_channel_name)
+        val descriptionText = context.getString(R.string.reminder_channel_desc)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(
+            context.getString(R.string.reminder_channel_id), name, importance
+        ).apply {
+            description = descriptionText
+        }
+        // register the channel with the system
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
 }
 
 data class ReminderViewState(

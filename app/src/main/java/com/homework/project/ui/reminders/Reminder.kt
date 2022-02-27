@@ -232,9 +232,9 @@ private fun editReminder(
 }
 
 private fun Date.formatToString(): String {
-    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(this)
+    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(this)
 }
 
 private fun Long.toDateString(): String {
-    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).format(Date(this))
+    return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault()).format(Date(this))
 }

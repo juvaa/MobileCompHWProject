@@ -41,7 +41,7 @@ fun EditReminder(
     }
 
     val parseError = rememberSaveable { mutableStateOf(false) }
-    val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+    val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", Locale.getDefault())
     var checkedTime: Date?
 
     Surface {
@@ -96,7 +96,7 @@ fun EditReminder(
                             reminderTime.value = it
                             parseError.value = false
                         },
-                        label = { Text(text = "Reminder time (format ${df.toLocalizedPattern()})")},
+                        label = { Text(text = "Reminder time (${df.toLocalizedPattern()})")},
                         placeholder = { Text(text = df.toLocalizedPattern())},
                         modifier = Modifier
                             .fillMaxWidth()

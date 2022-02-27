@@ -12,6 +12,8 @@ import com.homework.project.data.room.ReminderAppDatabase
 object Graph {
     lateinit var database: ReminderAppDatabase
 
+    lateinit var appContext: Context
+
     val userRepository by lazy {
         UserRepository(
             userDao = database.userDao()
@@ -25,6 +27,7 @@ object Graph {
     }
 
     fun provide(context: Context) {
+        appContext = context
         database = Room.databaseBuilder(context, ReminderAppDatabase::class.java, "mcData.db")
             .fallbackToDestructiveMigration() // don't use this in production app
             .build()
