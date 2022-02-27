@@ -131,9 +131,9 @@ private fun ReminderListItem(
             modifier = Modifier
                 .padding(8.dp)
                 .constrainAs(icon) {
-                start.linkTo(parent.start)
-                centerVerticallyTo(parent)
-            }
+                    start.linkTo(parent.start)
+                    centerVerticallyTo(parent)
+                }
         )
 
         // message

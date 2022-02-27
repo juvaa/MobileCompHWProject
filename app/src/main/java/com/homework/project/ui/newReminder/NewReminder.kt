@@ -34,6 +34,7 @@ fun NewReminder(
     val message = rememberSaveable { mutableStateOf("") }
     val reminderTime = rememberSaveable { mutableStateOf("") }
     val reminderIcon = rememberSaveable { mutableStateOf(ReminderIcons.DEFAULT) }
+    val reminderNotification = rememberSaveable { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
 
     val icon = when (reminderIcon.value) {
@@ -102,6 +103,18 @@ fun NewReminder(
                             if (parseError.value) error("Invalid date format")
                         }
                 )
+                Spacer(modifier = Modifier.height(10.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Notifications",
+                        modifier = Modifier.padding(end = 96.dp)
+                    )
+                    Switch(
+                        checked = reminderNotification.value,
+                        onCheckedChange = { reminderNotification.value = it },
+                        modifier = Modifier.padding(start = 96.dp)
+                    )
+                }
                 Spacer(modifier = Modifier.height(10.dp))
                 Box(modifier = Modifier.fillMaxWidth()) {
                     OutlinedTextField(
@@ -173,7 +186,8 @@ fun NewReminder(
                                         reminder_time = checkedTime!!.time,
                                         location_x = null,
                                         location_y = null,
-                                        reminder_icon = reminderIcon.value
+                                        reminder_icon = reminderIcon.value,
+                                        reminder_notification = reminderNotification.value
                                     )
                                 )
                             }

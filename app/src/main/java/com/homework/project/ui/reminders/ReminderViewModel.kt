@@ -15,12 +15,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.*
 
 class ReminderViewModel(
     private val reminderRepository: ReminderRepository = Graph.reminderRepository,
     private val ids: Ids = Ids
 ) : ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
+    private val _showAll = MutableStateFlow(false)
 
     val state: StateFlow<ReminderViewState>
         get() = _state
@@ -29,9 +31,23 @@ class ReminderViewModel(
         createNotificationChannel(context = Graph.appContext)
         viewModelScope.launch {
             reminderRepository.getReminders(ids.Id).collect { reminders ->
-                _state.value = ReminderViewState(reminders)
+                if (_showAll.value) {
+                    _state.value = ReminderViewState(reminders)
+                } else {
+                    val pastReminders = mutableListOf<Reminder>()
+                    for (reminder in reminders) {
+                        if (reminder.reminder_time!! < Date().time) {
+                            pastReminders.add(reminder)
+                        }
+                    }
+                    _state.value = ReminderViewState(pastReminders)
+                }
             }
         }
+    }
+
+    fun changeShowAllState(state: Boolean) {
+        _showAll.value = state
     }
 
     suspend fun removeReminder(reminder: Reminder) {
@@ -64,5 +80,6 @@ private fun createNotificationChannel(context: Context) {
 }
 
 data class ReminderViewState(
-    val reminders: List<Reminder> = emptyList()
+    val reminders: List<Reminder> = emptyList(),
+    val showAll: Boolean = false
 )

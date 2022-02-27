@@ -69,6 +69,7 @@ fun EditReminder(
                 val message = rememberSaveable { mutableStateOf(reminder.message) }
                 val reminderTime = rememberSaveable { mutableStateOf(df.format(reminder.reminder_time)) }
                 val reminderIcon = rememberSaveable { mutableStateOf(reminder.reminder_icon) }
+                val reminderNotification = rememberSaveable { mutableStateOf(reminder.reminder_notification) }
 
                 val icon = when (reminderIcon.value) {
                     ReminderIcons.DEFAULT -> Icons.Filled.Event
@@ -104,6 +105,18 @@ fun EditReminder(
                                 if (parseError.value) error("Invalid date format")
                             }
                     )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = "Notifications",
+                            modifier = Modifier.padding(end = 96.dp)
+                        )
+                        Switch(
+                            checked = reminderNotification.value,
+                            onCheckedChange = { reminderNotification.value = it },
+                            modifier = Modifier.padding(start = 96.dp)
+                        )
+                    }
                     Spacer(modifier = Modifier.height(10.dp))
                     Box(modifier = Modifier.fillMaxWidth()) {
                         OutlinedTextField(
@@ -176,7 +189,8 @@ fun EditReminder(
                                             reminder_seen = reminder.reminder_seen,
                                             location_x = reminder.location_x,
                                             location_y = reminder.location_y,
-                                            reminder_icon = reminderIcon.value
+                                            reminder_icon = reminderIcon.value,
+                                            reminder_notification = reminderNotification.value
                                         )
                                     )
                                 }

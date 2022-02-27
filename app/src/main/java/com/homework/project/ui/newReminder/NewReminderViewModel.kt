@@ -25,7 +25,9 @@ class NewReminderViewModel(
     get() = _state
 
     suspend fun saveReminder(reminder: Reminder): Long {
-        setOneTimeNotification(reminder)
+        if (reminder.reminder_notification) {
+            setOneTimeNotification(reminder)
+        }
         return reminderRepository.addReminder(reminder)
     }
 

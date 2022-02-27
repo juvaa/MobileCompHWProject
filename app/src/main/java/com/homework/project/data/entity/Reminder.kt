@@ -32,4 +32,5 @@ data class Reminder(
     @ColumnInfo(name = "creator_id") val creator_id: Long,
     @ColumnInfo(name = "reminder_seen") val reminder_seen: Boolean = false,
     @ColumnInfo(name = "reminder_icon") val reminder_icon: ReminderIcons,
+    @ColumnInfo(name = "reminder_notification") val reminder_notification: Boolean = true,
     )
