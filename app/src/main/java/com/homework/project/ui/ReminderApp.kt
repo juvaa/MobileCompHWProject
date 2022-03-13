@@ -7,6 +7,7 @@ import com.homework.project.ReminderAppState
 import com.homework.project.rememberReminderAppState
 import com.homework.project.ui.editReminder.EditReminder
 import com.homework.project.ui.login.Login
+import com.homework.project.ui.maps.LocationSelection
 import com.homework.project.ui.newReminder.NewReminder
 import com.homework.project.ui.reminders.RemindersView
 import com.homework.project.ui.userProfile.UserProfile
@@ -27,10 +28,14 @@ fun ReminderApp(appState: ReminderAppState = rememberReminderAppState()) {
             UserProfile(onBackPress = appState::navigateBack)
         }
         composable(route = "newReminder") {
-            NewReminder(onBackPress = appState::navigateBack)
+            NewReminder(onBackPress = appState::navigateBack, navController = appState.navController)
         }
         composable(route = "editReminder") {
-            EditReminder(onBackPress = appState::navigateBack)
+            EditReminder(onBackPress = appState::navigateBack, navController = appState.navController)
+        }
+
+        composable(route = "locationSelection") {
+            LocationSelection(navController = appState.navController)
         }
     }
 }

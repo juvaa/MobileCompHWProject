@@ -36,7 +36,11 @@ class ReminderViewModel(
                 } else {
                     val pastReminders = mutableListOf<Reminder>()
                     for (reminder in reminders) {
-                        if (reminder.reminder_time!! < Date().time) {
+                        if (reminder.reminder_time == null && reminder.location_x == null && reminder.location_y == null) {
+                            pastReminders.add(reminder)
+                        } else if (reminder.reminder_time == null && reminder.location_x != null && reminder.location_y != null) { // TODO: Add location check here
+                            pastReminders.add(reminder)
+                        } else if (reminder.reminder_time!! < Date().time) {
                             pastReminders.add(reminder)
                         }
                     }

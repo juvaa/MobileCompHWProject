@@ -14,7 +14,9 @@ import androidx.compose.ui.semantics.error
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.google.accompanist.insets.systemBarsPadding
+import com.google.android.gms.maps.model.LatLng
 import com.homework.project.R
 import com.homework.project.data.Ids
 import com.homework.project.data.entity.Reminder
@@ -29,13 +31,20 @@ import java.util.*
 fun NewReminder(
     onBackPress: () -> Unit,
     userId: Ids = Ids,
-    viewModel: NewReminderViewModel = viewModel()
+    viewModel: NewReminderViewModel = viewModel(),
+    navController: NavController
 ) {
     val message = rememberSaveable { mutableStateOf("") }
     val reminderTime = rememberSaveable { mutableStateOf("") }
     val reminderIcon = rememberSaveable { mutableStateOf(ReminderIcons.DEFAULT) }
     val reminderNotification = rememberSaveable { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
+
+    val latlng = navController
+        .currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<LatLng>("location_data")
+        ?.value
 
     val icon = when (reminderIcon.value) {
         ReminderIcons.DEFAULT -> Icons.Filled.Event
@@ -104,16 +113,31 @@ fun NewReminder(
                         }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = "Notifications",
-                        modifier = Modifier.padding(end = 96.dp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text( // TODO: Redo the UI so it makes more sense
+                        text = "Location",
+                        modifier = Modifier.padding(start = 16.dp)
                     )
-                    Switch(
-                        checked = reminderNotification.value,
-                        onCheckedChange = { reminderNotification.value = it },
-                        modifier = Modifier.padding(start = 96.dp)
-                    )
+                    if (latlng == null) {
+                        TextButton(
+                            onClick = { navController.navigate("locationSelection") },
+                            modifier = Modifier
+                                .height(55.dp)
+                                .padding(end = 16.dp)
+                        ) {
+                            Text(text = "Select location")
+                        }
+                    } else {
+                        val textString = String.format("Lat: %1$.5f\nLng: %2$.5f", latlng.latitude, latlng.longitude)
+                        Text(
+                            text = textString,
+                            modifier = Modifier.padding(end = 16.dp)
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -171,10 +195,33 @@ fun NewReminder(
                     }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Notifications",
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                    Switch(
+                        checked = reminderNotification.value,
+                        onCheckedChange = { reminderNotification.value = it },
+                        modifier = Modifier.padding(end = 16.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
                 Button(
                     enabled = true,
                     onClick = {
-                        checkedTime = parseDate(reminderTime.value , df, parseError)
+                        if (reminderTime.value.isNotEmpty()) {
+                            checkedTime = parseDate(reminderTime.value , df, parseError)
+                        } else {
+                            parseError.value = false
+                            checkedTime = null
+                        }
 
                         if (!parseError.value) {
                             coroutineScope.launch {
@@ -183,9 +230,9 @@ fun NewReminder(
                                         message = message.value,
                                         creator_id = userId.Id,
                                         creation_time = Date().time,
-                                        reminder_time = checkedTime!!.time,
-                                        location_x = null,
-                                        location_y = null,
+                                        reminder_time = checkedTime?.time,
+                                        location_y = latlng?.latitude,
+                                        location_x = latlng?.longitude,
                                         reminder_icon = reminderIcon.value,
                                         reminder_notification = reminderNotification.value
                                     )

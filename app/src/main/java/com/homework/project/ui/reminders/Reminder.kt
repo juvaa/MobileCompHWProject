@@ -156,27 +156,47 @@ private fun ReminderListItem(
         )
 
         // date
-        Text(
-            text = when {
-                reminder.reminder_time != null -> { reminder.reminder_time.toDateString() }
-                else -> Date().formatToString()
-            },
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.caption,
-            modifier = Modifier.constrainAs(date) {
-                linkTo(
-                    start = icon.end,
-                    end = notifications.start,
-                    startMargin = 8.dp,
-                    endMargin = 8.dp,
-                    bias = 0f
-                )
-                top.linkTo(reminderMessage.bottom, 4.dp)
-                bottom.linkTo(parent.bottom, 8.dp)
-                width = Dimension.preferredWrapContent
-            }
-        )
+        if (reminder.reminder_time != null) {
+            Text(
+                text = reminder.reminder_time.toDateString(),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.constrainAs(date) {
+                    linkTo(
+                        start = icon.end,
+                        end = notifications.start,
+                        startMargin = 8.dp,
+                        endMargin = 8.dp,
+                        bias = 0f
+                    )
+                    top.linkTo(reminderMessage.bottom, 4.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
+                    width = Dimension.preferredWrapContent
+                }
+            )
+        } else if (reminder.location_x != null && reminder.location_y != null) {
+            val textString = String.format("Lat: %1$.5f, Lng: %2$.5f", reminder.location_y, reminder.location_x)
+            Text(
+                text = textString,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.constrainAs(date) {
+                    linkTo(
+                        start = icon.end,
+                        end = notifications.start,
+                        startMargin = 8.dp,
+                        endMargin = 8.dp,
+                        bias = 0f
+                    )
+                    top.linkTo(reminderMessage.bottom, 4.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
+                    width = Dimension.preferredWrapContent
+                }
+            )
+        }
+
         // notifications button
         IconButton(
             onClick = { /*TODO*/ },

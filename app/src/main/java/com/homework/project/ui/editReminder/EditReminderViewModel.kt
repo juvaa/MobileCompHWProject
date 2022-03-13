@@ -39,7 +39,7 @@ class EditReminderViewModel(
 
     suspend fun updateReminder(reminder: Reminder) {
         cancelPreviousNotification(reminder)
-        if (reminder.reminder_notification) {
+        if (reminder.reminder_notification && reminder.reminder_time != null) {
             setOneTimeNotification(reminder)
         }
         reminderRepository.updateReminder(reminder)
