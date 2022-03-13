@@ -12,6 +12,8 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.homework.project.Graph
 
+// Adapted from this tutorial: https://proandroiddev.com/android-tutorial-on-location-update-with-livedata-774f8fcc9f15
+
 class LocationLiveData(
     context: Context
 ) : LiveData<LocationModel>() {
