@@ -27,6 +27,18 @@ fun LocationSelection(
     val mapView = rememberMapViewWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
 
+    val currentLatitude = navController
+        .previousBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<Double>("latitude")
+        ?.value
+
+    val currentLongitude = navController
+        .previousBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<Double>("longitude")
+        ?.value
+
     Column(modifier = Modifier
         .fillMaxWidth()
         .background(Color.Black)
@@ -36,14 +48,14 @@ fun LocationSelection(
             coroutineScope.launch {
                 val map = mapView.awaitMap()
                 map.uiSettings.isZoomControlsEnabled = true
-                val location = LatLng(65.06, 25.47)
+                val location = LatLng(currentLatitude ?: 65.10, currentLongitude ?: 25.47)
 
                 map.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(location, 10f)
                 )
 
                 val markerOptions = MarkerOptions()
-                    .title("Welcome to Oulu")
+                    .title("Current reminder location")
                     .position(location)
                 map.addMarker(markerOptions)
 
@@ -67,12 +79,11 @@ private fun setMapLongClick(
         )
 
         map.addMarker(
-            MarkerOptions().position(latlng).title("Payment location").snippet(snippet)
+            MarkerOptions().position(latlng).title("New reminder location").snippet(snippet)
         ).apply {
             navController.previousBackStackEntry
                 ?.savedStateHandle
                 ?.set("location_data", latlng)
-//            navController.popBackStack()
         }
     }
 }

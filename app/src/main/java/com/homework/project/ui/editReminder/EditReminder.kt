@@ -134,7 +134,19 @@ fun EditReminder(
                         }
                         if (latlng == null) {
                             TextButton(
-                                onClick = { navController.navigate("locationSelection") },
+                                onClick = {
+                                    if (reminder.location_y != null && reminder.location_x != null) {
+                                        navController
+                                            .currentBackStackEntry
+                                            ?.savedStateHandle
+                                            ?.set("latitude", reminder.location_y)
+                                        navController
+                                            .currentBackStackEntry
+                                            ?.savedStateHandle
+                                            ?.set("longitude", reminder.location_x)
+                                    }
+                                    navController.navigate("locationSelection")
+                                },
                                 modifier = Modifier
                                     .height(55.dp)
                                     .padding(end = 16.dp)
