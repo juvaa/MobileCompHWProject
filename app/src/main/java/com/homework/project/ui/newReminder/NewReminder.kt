@@ -118,7 +118,7 @@ fun NewReminder(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text( // TODO: Redo the UI so it makes more sense
+                    Text(
                         text = "Location",
                         modifier = Modifier.padding(start = 16.dp)
                     )

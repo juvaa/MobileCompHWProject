@@ -49,8 +49,15 @@ fun Reminder(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        val textString = String.format("Lat: %1$.5f, Lng: %2$.5f", latitude.value, longitude.value)
-        Text(text = textString)
+        val textString = String.format("Current location Lat: %1$.5f, Lng: %2$.5f", latitude.value, longitude.value)
+        TextButton(
+            onClick = { navController.navigate("reminderMap") },
+            modifier = Modifier
+                .height(55.dp)
+                .padding(end = 16.dp)
+        ) {
+            Text(text = textString)
+        }
         ReminderList(
             list = viewState.reminders,
             viewModel = viewModel,
