@@ -9,14 +9,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.homework.project.Graph
 import com.homework.project.R
+import com.homework.project.data.LocationModel
 import com.homework.project.data.entity.Reminder
 import com.homework.project.util.ReminderIcons
 import kotlinx.coroutines.CoroutineScope
@@ -31,10 +36,21 @@ fun Reminder(
     val viewModel: ReminderViewModel = viewModel()
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    val longitude = remember{ mutableStateOf(0f.toDouble())}
+    val latitude = remember{ mutableStateOf(0f.toDouble())}
+
+    val locationObserver = Observer<LocationModel> {
+        longitude.value = it.longitude
+        latitude.value = it.latitude
+    }
+
+    viewModel.getLocationData().observe(LocalLifecycleOwner.current, locationObserver)
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        val textString = String.format("Lat: %1$.5f, Lng: %2$.5f", latitude.value, longitude.value)
+        Text(text = textString)
         ReminderList(
             list = viewState.reminders,
             viewModel = viewModel,

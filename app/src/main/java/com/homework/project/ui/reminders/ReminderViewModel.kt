@@ -1,14 +1,18 @@
 package com.homework.project.ui.reminders
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.location.Location
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.location.LocationServices
 import com.homework.project.Graph
 import com.homework.project.R
 import com.homework.project.data.Ids
+import com.homework.project.data.LocationLiveData
 import com.homework.project.data.entity.Reminder
 import com.homework.project.data.repository.ReminderRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,12 +21,15 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
+@SuppressLint("MissingPermission")
 class ReminderViewModel(
     private val reminderRepository: ReminderRepository = Graph.reminderRepository,
     private val ids: Ids = Ids
 ) : ViewModel() {
     private val _state = MutableStateFlow(ReminderViewState())
     private val _showAll = MutableStateFlow(false)
+
+    private val locationData = LocationLiveData(Graph.appContext)
 
     val state: StateFlow<ReminderViewState>
         get() = _state
@@ -53,6 +60,8 @@ class ReminderViewModel(
     fun changeShowAllState(state: Boolean) {
         _showAll.value = state
     }
+
+    fun getLocationData() = locationData
 
     suspend fun removeReminder(reminder: Reminder) {
         reminderRepository.deleteReminder(reminder)

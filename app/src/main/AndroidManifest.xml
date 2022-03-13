@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.homework.project">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:name=".ReminderApplication"
         android:allowBackup="true"
@@ -10,6 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileCompProject">
+
+<!--        <service-->
+<!--            android:name="MyLocationService"-->
+<!--            android:foregroundServiceType="location">-->
+<!--        </service>-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
