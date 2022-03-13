@@ -51,7 +51,7 @@ fun EditReminder(
         .currentBackStackEntry
         ?.savedStateHandle
         ?.getLiveData<LatLng>("location_data")
-        ?.value // TODO: Possibly pass the current location similarly to the map view
+        ?.value
 
     Surface {
         Column(
@@ -126,7 +126,7 @@ fun EditReminder(
                             text = "Location",
                             modifier = Modifier.padding(start = 16.dp)
                         )
-                        if (reminder.location_y != null && reminder.location_x != null) { // TODO: Redo the UI so it makes more sense
+                        if (reminder.location_y != null && reminder.location_x != null) {
                             val textString = String.format("Lat: %1$.5f\nLng: %2$.5f", reminder.location_y, reminder.location_x)
                             Text(
                                 text = textString,
@@ -254,7 +254,7 @@ fun EditReminder(
                                             creation_time = reminder.creation_time,
                                             reminder_time = checkedTime?.time,
                                             reminder_seen = reminder.reminder_seen,
-                                            location_y = latlng?.latitude ?: reminder.location_y, // TODO: Do this differently so it is possible to have null location
+                                            location_y = latlng?.latitude ?: reminder.location_y,
                                             location_x = latlng?.longitude ?: reminder.location_x,
                                             reminder_icon = reminderIcon.value,
                                             reminder_notification = reminderNotification.value
