@@ -36,8 +36,8 @@ fun Reminder(
     val viewModel: ReminderViewModel = viewModel()
     val viewState by viewModel.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    val longitude = remember{ mutableStateOf(0f.toDouble())}
-    val latitude = remember{ mutableStateOf(0f.toDouble())}
+    val longitude = remember{ mutableStateOf(0.0)}
+    val latitude = remember{ mutableStateOf(0.0)}
 
     val locationObserver = Observer<LocationModel> {
         longitude.value = it.longitude
